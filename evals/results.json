@@ -1,0 +1,49 @@
+{
+  "n": 4123,
+  "accuracy_3class": 0.8864904195973805,
+  "accuracy_human_vs_bot": 0.9226291535289838,
+  "confusion_matrix_rows_true_cols_pred": {
+    "human": {
+      "human": 2000,
+      "ai_agent": 0,
+      "other_bot": 0
+    },
+    "ai_agent": {
+      "human": 9,
+      "ai_agent": 57,
+      "other_bot": 147
+    },
+    "other_bot": {
+      "human": 310,
+      "ai_agent": 2,
+      "other_bot": 1598
+    }
+  },
+  "per_class": {
+    "human": {
+      "support": 2000,
+      "precision": 0.8624407072013799,
+      "recall": 1,
+      "f1": 0.9261403102570038
+    },
+    "ai_agent": {
+      "support": 213,
+      "precision": 0.9661016949152542,
+      "recall": 0.2676056338028169,
+      "f1": 0.4191176470588235
+    },
+    "other_bot": {
+      "support": 1910,
+      "precision": 0.9157593123209169,
+      "recall": 0.8366492146596859,
+      "f1": 0.8744186046511628
+    }
+  },
+  "sources": [
+    "intoli/user-agents",
+    "monperrus/crawler-user-agents",
+    "ai-robots-txt/ai.robots.txt"
+  ],
+  "caveat": "AI label is derived from ai.robots.txt names; our hand list overlaps that list by design, so AI recall measures coverage of known agents, not generalisation.",
+  "run_at": "2026-10-28T01:26:39.599Z"
+}
