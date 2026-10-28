@@ -44,3 +44,18 @@ Honest read:
 
 ## How it ships
 `npm test` (10 tests), then `npm run eval`, then `npm run build`, then deploy with a D1 binding `DB`. Free tier: Workers, D1 and no AI binding. Rollback tag: `v0-rollback`.
+
+## How to run
+
+```bash
+npm install   # dev deps only
+npm test      # 14 offline tests, no Workers AI calls
+npm run dev   # local wrangler dev
+```
+
+## Test results (2026-10-27)
+
+| Suite | Tests | Status |
+|---|---|---|
+| Unit + edge cases (test/edge.test.js added) | 10→14 | all pass |
+| Live demo https://agent-16-agent-analytics.braylo777.workers.dev | HTTP 200 | verified 2026-10-27 |
