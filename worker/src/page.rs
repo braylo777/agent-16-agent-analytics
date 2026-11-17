@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent Analytics</title>
+//! Demo page (generated from the old src/page.html; kept as a Rust string).
+pub const PAGE: &str = r####"<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent Analytics</title>
 <style>body{font-family:system-ui;max-width:820px;margin:40px auto;padding:0 16px;background:#0e1116;color:#e6e6e6}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #333;padding:6px;text-align:left}.card{background:#161b22;padding:14px;border-radius:8px;margin:12px 0}input{width:75%;padding:8px;background:#0e1116;color:#eee;border:1px solid #333;border-radius:6px}button{padding:8px 12px;border:0;border-radius:6px;background:#c9a227}</style></head>
 <body><h1>Agent Analytics</h1><p>Which AI agents visit this site, and why. Every visit to this page is logged to D1 and classified as human, AI agent or other bot.</p>
 <div class="card"><b>Your visit:</b> <span id="me"></span></div>
@@ -9,3 +10,4 @@ fetch('/api/classify').then(r=>r.json()).then(j=>me.textContent=j.kind+(j.agent?
 async function tr(){tro.textContent=JSON.stringify(await (await fetch('/api/classify?ua='+encodeURIComponent(ua.value))).json(),null,2)}
 fetch('/api/stats').then(r=>r.json()).then(s=>{k.textContent='Total '+s.total+' · '+Object.entries(s.by_kind||{}).map(e=>e.join(': ')).join(' · ');c.innerHTML='<tr><th>Intent</th><th>Section</th><th>Visits</th><th>Agents</th></tr>'+(s.clusters||[]).map(x=>`<tr><td>${x.intent}</td><td>${x.section}</td><td>${x.visits}</td><td>${x.agents.join(', ')}</td></tr>`).join('')});
 </script></body></html>
+"####;

@@ -9,11 +9,11 @@ Shows which AI agents visit your site and why. Every request is logged to **Clou
 More and more traffic comes from AI agents, and GA-style analytics hide it. Site owners need to know who is training on their content, who is citing it in answers, and who is fetching it on a user's behalf.
 
 ## How it was built
-- `src/classify.js`: a hand-written list of 36 AI agent tokens, each tagged with its intent, plus bot heuristics (bot, crawler and HTTP-library tokens, contact URLs or emails in the UA, non-browser UA, empty UA). No model.
-- `src/index.js`: logs each visit (ts, path, UA, kind, agent, intent, country) to D1 and serves `/api/stats` and its clusters.
+- `src/agent16/classify.py` and `worker/src/classify.rs`: a hand-written list of 36 AI agent tokens, each tagged with its intent, plus bot heuristics (bot, crawler and HTTP-library tokens, contact URLs or emails in the UA, non-browser UA, empty UA). No model.
+- `worker/src/worker_entry.rs` (D1 routes): logs each visit (ts, path, UA, kind, agent, intent, country) to D1 and serves `/api/stats` and its clusters.
 - Tests use an in-memory D1 stand-in.
 
-## Results. Real, from `evals/results.json` (`npm run eval`)
+## Results. Real, from `evals/results.json` (`python3 evals/run.py`)
 The labeled logs come from 4,123 UAs, each labeled by its source rather than by this classifier:
 - human: 2,000 real browser UAs from intoli/user-agents
 - ai_agent: crawler-user-agents instances whose pattern names an agent in ai-robots-txt
@@ -43,19 +43,13 @@ Honest read:
 - One heuristic round (contact URL or email in the UA) was added after the first eval run, which scored 0.787 3-class.
 
 ## How it ships
-`npm test` (10 tests), then `npm run eval`, then `npm run build`, then deploy with a D1 binding `DB`. Free tier: Workers, D1 and no AI binding. Rollback tag: `v0-rollback`.
-
-## How to run
-
 ```bash
-npm install   # dev deps only
-npm test      # 14 offline tests, no Workers AI calls
-npm run dev   # local wrangler dev
+python3 -m pytest                       # Python tests
+cd worker && cargo test                 # Rust tests
+python3 evals/run.py --write            # re-run the labeled-log eval, writes evals/results.json
+cd worker && worker-build --release     # build the Worker (wasm)
+wrangler deploy                         # needs the D1 binding DB
 ```
+Free tier: Workers and D1, no AI binding. The labelled data is in `data/`. Tests: Python 4 test functions, Rust 2. The old JavaScript, the Python and the Rust code classify 2,936 user agents (every crawler instance, 800 real browser UAs and edge cases) identically, with and without an empty Accept-Language. Re-running the eval in Python reproduces the stored `evals/results.json` exactly (4,123 rows, 88.6% 3-class accuracy).
 
-## Test results (2026-10-27)
-
-| Suite | Tests | Status |
-|---|---|---|
-| Unit + edge cases (test/edge.test.js added) | 10→14 | all pass |
-| Live demo https://agent-16-agent-analytics.braylo777.workers.dev | HTTP 200 | verified 2026-10-27 |
+The previous JavaScript version is on the `legacy-js` branch and the `pre-pycrust` tag.
