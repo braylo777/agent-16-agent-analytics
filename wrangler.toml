@@ -7,6 +7,11 @@ binding = "DB"
 database_name = "agent-16-agent-analytics"
 database_id = "1a6c5b5a-123e-4406-b820-2cb3479e1aa3"
 
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1016"
+simple = { limit = 5, period = 60 }
+
 [[rules]]
 type = "Text"
 globs = ["**/*.html"]
